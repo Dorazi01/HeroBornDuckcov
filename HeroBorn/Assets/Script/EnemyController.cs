@@ -1,92 +1,50 @@
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
+    [Header("Status")]
+    public int enemyHp = 100;
 
-    [SerializeField] Transform player;
+    int bulletDamage = 35;
+    public Slider hpSlider;
+
+    [Header("AI")]
+    Transform player;     // 🛑 플레이어 (자동으로 찾을 것임)
     NavMeshAgent agent;
 
-    int index = 0;
-
-    int enemyHp = 7;
-
-    public List<Transform> patrolPoints = new List<Transform>();
-
-    bool isAttacking = false;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //index Clear
-        if (index == 3)
-        {
-            index = 0;
-        }
-
-
-
-        if (isAttacking)
+        // 플레이어가 있고, 살아있다면 무조건 추적
+        if (player != null)
         {
             agent.SetDestination(player.position);
         }
-        else
-        {
-            //agent.pathPending : 네비메시가 목적지까지 경로를 계산중인지 여부
-            //메모리 절약을 위한 경로계산은 한번만.
-            if (!agent.pathPending && agent.remainingDistance < 0.5f)
-            {
-                Patrol();
-            }
-            
-            if (Vector3.Distance(transform.position, patrolPoints[index].position) < 1f)
-            {
-                index++;
-                Debug.Log("인덱스 증가 ");
-            }
-        }
     }
 
-
-    void Patrol()
+    void OnCollisionEnter(Collision collision)
     {
-        agent.SetDestination(patrolPoints[index].position);
-    }
-    
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            enemyHp -= bulletDamage;
+            if (hpSlider != null) hpSlider.value = enemyHp;
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("Attack!");
-            isAttacking = true;
-        }
-        if (other.CompareTag("Bullet"))
-        {
-            enemyHp--;
-            //Debug.LogFormat("Enemy Hit! HP: {0}", enemyHp);
             if (enemyHp <= 0)
             {
-                //Debug.Log("Enemy Dead!");
                 Destroy(gameObject);
             }
         }
     }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("Stop Attacking!");
-            isAttacking = false;
-        }
-    } 
 }

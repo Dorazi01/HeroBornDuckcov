@@ -13,4 +13,18 @@ public class BulletController : MonoBehaviour
     {
         
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // 충돌한 객체가 적인지 확인
+        EnemyController enemy = collision.gameObject.GetComponent<EnemyController>();
+        if (enemy != null)
+        {
+            
+        }
+
+        // 총알 파괴
+        Destroy(gameObject);
+    }
+
 }
