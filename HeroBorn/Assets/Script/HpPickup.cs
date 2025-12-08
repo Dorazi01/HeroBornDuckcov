@@ -1,4 +1,3 @@
-using UnityEditor.Build.Content;
 using UnityEngine;
 
 public class HpPickup : MonoBehaviour
@@ -10,7 +9,7 @@ public class HpPickup : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("HP Pickup Collected!");
-            GMBehavior.instance.CollectItem();
+            //GMBehavior.instance.CollectItem();
             Destroy(gameObject);
         }
     }

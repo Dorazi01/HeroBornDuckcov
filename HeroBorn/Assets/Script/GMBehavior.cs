@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 
 /*
@@ -18,6 +19,12 @@ public class GMBehavior : MonoBehaviour
 
     public float playerHp = 100f;
     public int itemCollectCount = 0;
+
+    public int gameProgress = 0;
+
+    public int gameProgressWin = 3;
+
+    //public List<int> gameLevels = new List<int>();
 
     public bool isGameOver = false;
 
@@ -57,6 +64,7 @@ public class GMBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ProgressWin();
 
     }
 
@@ -73,7 +81,7 @@ public class GMBehavior : MonoBehaviour
             // Handle player death (e.g., restart level, show game over screen)
         }
     }
-
+/*
     public void CollectItem()
     {
         itemCollectCount++;
@@ -90,6 +98,22 @@ public class GMBehavior : MonoBehaviour
             // Handle game win (e.g., show victory screen)
         }
     }
+*/
+
+
+
+    void ProgressWin()
+    {
+        if (gameProgress >= gameProgressWin)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            isGameWin = true;
+            Debug.Log("Win");
+            Time.timeScale = 0f;
+        }
+    }
+
 
     public void RestartGame()
     {

@@ -11,6 +11,10 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI itemCountText;
     public Button WinButton;
     public Button GameOverButton;
+
+    public TextMeshProUGUI progressText;
+
+    public TextMeshProUGUI progrText;
     
 
     [Header("Crosshair UI")]
@@ -42,7 +46,8 @@ public class UIManager : MonoBehaviour
         GameOverButton.gameObject.SetActive(false);
         distanceText.gameObject.SetActive(true);
         reloadText.gameObject.SetActive(false);
-        
+        progressText.gameObject.SetActive(true);
+        progrText.gameObject.SetActive(true);
         
             
         // 초기 조준선 색상 설정
@@ -52,12 +57,36 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
+        if (GMBehavior.instance == null || player == null) return;
+        UpdateCommonUI();
         
+        if (!GMBehavior.instance.isGameOver && !GMBehavior.instance.isGameWin) {
+            UpdateStaminaBar();
+            UpdateReloadUI();
+            UpdateAmmoText();
+            UpdateDistanceText();
             
+
+            if (!player.isReloading)
+            {
+                UpdateCrosshair();
+            }
+            
+            
+            }
+
+    }
+
+    void UpdateCommonUI()
+    {
+
+        if (GMBehavior.instance == null) return;
 
         #region Text UI & Game State
         hpText.text = "HP: " + GMBehavior.instance.playerHp;
         itemCountText.text = "Items: " + GMBehavior.instance.itemCollectCount;
+        progressText.text = "Progress: " + GMBehavior.instance.gameProgress + " / " + GMBehavior.instance.gameProgressWin;
+        progrText.text = "Destroy Enemy Spawners";
 
 
         if (GMBehavior.instance.isGameWin)
@@ -72,31 +101,13 @@ public class UIManager : MonoBehaviour
         }
         #endregion
 
-        
-        if (!GMBehavior.instance.isGameOver && !GMBehavior.instance.isGameWin) {
-            UpdateStaminaBar();
-            UpdateReloadUI();
-            UpdateAmmoText();
-            UpdateDistanceText();
-
-
-            if (!player.isReloading)
-            {
-                UpdateCrosshair();
-            }
-            
-            
-            }
-
     }
 
 
     void UpdateDistanceText()
     {
-        // 플레이어가 없거나 텍스트가 없으면 패스
         if (player == null || distanceText == null) return;
 
-        // 플레이어가 계산해둔 거리를 가져와서 텍스트로 출력
         distanceText.text = player.targetDistance.ToString("F1") + "m";
     }
 
@@ -104,7 +115,6 @@ public class UIManager : MonoBehaviour
     {
         if (ammoText == null || player == null) return;
 
-        // "현재탄약 / 최대탄약" 형식으로 표시
         ammoText.text = player.isReloading ? "Reloading..." : $"{player.currentAmmo} / {player.maxAmmo}";
         
         if (player.currentAmmo <= 0 && !player.isReloading)
@@ -129,7 +139,6 @@ public class UIManager : MonoBehaviour
             reloadText.gameObject.SetActive(false);
 
 
-            // 장전 중이면 UI 켜고 진행률 표시
             if (!reloadIndicator.gameObject.activeSelf)
                 reloadIndicator.gameObject.SetActive(true);
                 crosshairImage.gameObject.SetActive(false);
@@ -139,7 +148,6 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            // 장전 중이 아니면 UI 끄기
             if (reloadIndicator.gameObject.activeSelf)
                 reloadIndicator.gameObject.SetActive(false);
             crosshairImage.gameObject.SetActive(true);
@@ -165,9 +173,13 @@ public class UIManager : MonoBehaviour
         {
             if (!crosshairImage.gameObject.activeSelf)
                 crosshairImage.gameObject.SetActive(true);
-        }
+        } 
 
-        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit, 1000f))
+        Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 1000f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.CompareTag("Enemy"))
             {
@@ -185,24 +197,21 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // 🏃 스태미나 바 업데이트 로직
     void UpdateStaminaBar()
     {
         if (staminaSlider == null || player == null) return;
 
-        // 슬라이더 값 = 현재 스태미나 / 최대 스태미나 (0 ~ 1 사이 비율로 변환)
+
         staminaSlider.value = player.playerCurStamina / player.playerMaxStamina;
 
         if (staminaFillImage != null)
         {
             if (player.playerCanRun)
             {
-                // 달릴 수 있는 상태면 평소 색상
                 staminaFillImage.color = normalStaminaColor;
             }
             else
             {
-                // 지쳐서 못 달리는 상태면 빨간색
                 staminaFillImage.color = exhaustedStaminaColor;
             }
         }

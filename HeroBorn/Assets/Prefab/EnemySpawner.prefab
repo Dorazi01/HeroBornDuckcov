@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8506023213719281585}
   m_Layer: 0
   m_Name: EnemySpawner
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,7 +108,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.6, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8506023213719281585
 MonoBehaviour:
@@ -125,6 +125,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
   spawnPoint: {fileID: 3487600759863270909}
   spawnInterval: 2
+  hp: 500
 --- !u!1 &3487600759863270909
 GameObject:
   m_ObjectHideFlags: 0

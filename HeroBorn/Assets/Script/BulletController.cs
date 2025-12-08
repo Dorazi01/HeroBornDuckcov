@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
+    [Header("Effects")]
+    public GameObject impactEffectPrefab;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,15 +19,19 @@ public class BulletController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // 충돌한 객체가 적인지 확인
-        EnemyController enemy = collision.gameObject.GetComponent<EnemyController>();
-        if (enemy != null)
+        if (impactEffectPrefab != null)
         {
+            ContactPoint contact = collision.contacts[0];
             
+            Vector3 spawnPos = contact.point + (contact.normal * 0.1f);
+
+            GameObject effect = Instantiate(impactEffectPrefab, spawnPos, Quaternion.LookRotation(contact.normal));
+            Destroy(effect, 1f);; 
         }
 
-        // 총알 파괴
+        // 3. 총알 파괴
         Destroy(gameObject);
     }
+    
 
 }

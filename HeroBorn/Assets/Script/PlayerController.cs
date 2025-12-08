@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] // Inspector에서는 굳이 볼 필요 없음
     public float reloadProgress = 0f;
     public bool isReloading = false; // 장전 중인지 체크
-    float fireRate = 0.07f;    // 발사 간격 
+    public float fireRate = 0.07f;    // 발사 간격 
     float nextFireTime = 0f;
 
     public GameObject bulletPrefab;
@@ -516,8 +516,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
-            //Debug.Log("Player Hit by Enemy!");
-            GMBehavior.instance.playerHp -= 10;
+            GMBehavior.instance.TakeDamage(20f);
         }
         else if (collision.gameObject.CompareTag("HpPickup"))
         {
