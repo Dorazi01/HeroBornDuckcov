@@ -70,8 +70,10 @@ public class PlayerController : MonoBehaviour
     bool isShooting = false;
     bool isFireHeld = false;
     
-    float RecoilKickX = 2f;        
-    float RecoilKickY = 0.5f;      
+
+    //반동 변수
+    float RecoilKickX = 1f;        
+    float RecoilKickY = 0.4f;      
     float MaxRecoilX = 10f;        
     float MaxRecoilY = 3f;         
     float RecoilRecoverySpeed = 5f;
@@ -94,12 +96,52 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region PlayerHit
+    bool isTouchingEnemy = false;
+    Coroutine damageCoroutine;
+    #endregion
+
+    void Awake ()
+    {
+        playerActions = new InputAction();
+        rb = GetComponent<Rigidbody>();
+    }
+
+
+    void Start()
+    {
+        Application.targetFrameRate = 60;
+        currentAmmo = maxAmmo;
+        audioSource = GetComponent<AudioSource>();
+
+        if (cameraTransform != null)
+            defaultCameraPos = cameraTransform.localPosition;
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        RecoilRecover();
+        HandleCameraZoom(); 
+        Fire();
+        DrawLaser();
+    }
+
+    void FixedUpdate()
+    {
+        Run();
+        Move();
+        Jump();
+
+    } 
+
+
     
 
     //Vector2 move = new Vector2();
 
     private Vector2 inputVector;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -230,11 +272,22 @@ public class PlayerController : MonoBehaviour
     
     Vector2 mouse = context.ReadValue<Vector2>();
 
-    float currentSensitivity = isAiming ? mouseSensitivity * 0.2f : mouseSensitivity;
+    float appliedSensitivity = mouseSensitivity; // 기본값 10
+
+        if (isAiming)
+        {
+            // 1순위: 조준 중이면 아주 느리게 (예: 20% 속도)
+            appliedSensitivity *= 0.2f; 
+        }
+        else if (isFireHeld)
+        {
+            // 2순위: 그냥 난사 중이면 반동 잡기 편하게 약간만 느리게 (예: 60% 속도)
+            appliedSensitivity *= 0.4f; 
+        }
     //조준중 마우스 감도
 
-    float mouseX = mouse.x * currentSensitivity * Time.deltaTime;
-    float mouseY = mouse.y * currentSensitivity * Time.deltaTime;
+    float mouseX = mouse.x * appliedSensitivity * Time.deltaTime;
+    float mouseY = mouse.y * appliedSensitivity * Time.deltaTime;
 
     // 1. 상하(X축) 회전 -> 카메라만 담당
     xRotation -= mouseY;
@@ -247,6 +300,7 @@ public class PlayerController : MonoBehaviour
     
     void RecoilRecover()
     {
+        
         currentRecoilX = Mathf.Lerp(currentRecoilX, 0f, Time.deltaTime * RecoilRecoverySpeed);
         currentRecoilY = Mathf.Lerp(currentRecoilY, 0f, Time.deltaTime * RecoilRecoverySpeed);
 
@@ -265,54 +319,16 @@ public class PlayerController : MonoBehaviour
 
 
 
-    void Awake ()
-    {
-        playerActions = new InputAction();
-        rb = GetComponent<Rigidbody>();
-    }
-
-
-    void Start()
-    {
-        Application.targetFrameRate = 60;
-        currentAmmo = maxAmmo;
-        audioSource = GetComponent<AudioSource>();
-
-        if (cameraTransform != null)
-            defaultCameraPos = cameraTransform.localPosition;
-
-    }
-
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        RecoilRecover();
-        HandleCameraZoom(); 
-        Fire();
-        DrawLaser();
-    }
-
-    void FixedUpdate()
-    {
-
-        Run();
-        Move();
-        Jump();
-
-        
+    
 
 
 
     
-    } 
-
     void Run()
 {
     bool isMoving = inputVector.magnitude > 0.01f;
 
-    // 🛑 1. 달리기 상태 (스태미나 소모 및 제어)
+    // 1. 달리기 상태 (스태미나 소모 및 제어)
     if (isSprinting && playerCanRun && isMoving)
     {
         playerCurStamina -= 20f * Time.fixedDeltaTime; 
@@ -398,7 +414,7 @@ public class PlayerController : MonoBehaviour
             Vector3 direction = (targetPoint - spawnPos).normalized;
 
             // 4. 총알 생성
-            // 🛑 [중요] 총알이 '레이저 선'과 똑같은 각도로 생성됨
+            //  총알이 '레이저 선'과 똑같은 각도로 생성됨
             GameObject bullet = Instantiate(bulletPrefab, spawnPos, Quaternion.LookRotation(direction));
 
             if (audioSource != null && gunshotSound != null)
@@ -435,7 +451,7 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        // 🛑 [수정] 속도 결정 로직 (조준 > 달리기 > 걷기 순서로 우선순위)
+        // [수정] 속도 결정 로직 (조준 > 달리기 > 걷기 순서로 우선순위)
         if (isAiming)
         {
             moveSpeed = aimSpeed; // 2.5f (조준 시 느리게)
@@ -516,7 +532,12 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
-            GMBehavior.instance.TakeDamage(20f);
+            // 이미 맞고 있는 중이 아닐 때만 코루틴 시작
+            if (!isTouchingEnemy)
+            {
+                isTouchingEnemy = true;
+                damageCoroutine = StartCoroutine(DamageRoutine());
+            }
         }
         else if (collision.gameObject.CompareTag("HpPickup"))
         {
@@ -524,11 +545,36 @@ public class PlayerController : MonoBehaviour
             Destroy(collision.gameObject);
         }
     } 
+    // 2. 충돌 끝 (코루틴 중단)
     void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = false;
+        }
+        else if (collision.gameObject.CompareTag("Enemy"))
+        {
+            //적에게서 떨어지면 플래그 끄기
+            isTouchingEnemy = false;
+            
+            // (선택) 떨어지자마자 데미지 멈추고 싶으면 코루틴 강제 종료
+            if (damageCoroutine != null) StopCoroutine(damageCoroutine);
+        }
+    }
+
+    IEnumerator DamageRoutine()
+    {
+        // 적과 닿아있는 동안 계속 반복
+        while (isTouchingEnemy)
+        {
+            // 데미지 입힘
+            GMBehavior.instance.TakeDamage(20f);
+            //Debug.Log("Player took damage! HP: " + GMBehavior.instance.playerHp);
+
+            // HP가 0 이하면 게임 오버 처리 등 추가 가능
+            
+            // 1초 대기 (무적 시간)
+            yield return new WaitForSeconds(1.0f);
         }
     }
 }
