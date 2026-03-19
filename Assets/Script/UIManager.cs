@@ -4,8 +4,6 @@ using UnityEngine.UI; // UI 컴포넌트 사용을 위해 필수
 
 public class UIManager : MonoBehaviour
 {
-
-
     [Header("Common UI")]
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI itemCountText;
@@ -15,7 +13,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI progressText;
 
     public TextMeshProUGUI progrText;
-    
+
 
     [Header("Crosshair UI")]
     public Image crosshairImage;      // 조준점 이미지 연결
@@ -23,7 +21,7 @@ public class UIManager : MonoBehaviour
     public Color enemyTargetColor = Color.red;
     public Camera mainCamera;         // 레이캐스트를 쏠 메인 카메라
 
-    public TextMeshProUGUI distanceText; 
+    public TextMeshProUGUI distanceText;
 
     [Header("Stamina UI")]
     public Slider staminaSlider;      // 스태미나 슬라이더 연결
@@ -38,7 +36,7 @@ public class UIManager : MonoBehaviour
     public Image reloadIndicator;
     public TextMeshProUGUI ammoText;
 
-    public TextMeshProUGUI reloadText; 
+    public TextMeshProUGUI reloadText;
 
     void Start()
     {
@@ -48,8 +46,8 @@ public class UIManager : MonoBehaviour
         reloadText.gameObject.SetActive(false);
         progressText.gameObject.SetActive(true);
         progrText.gameObject.SetActive(true);
-        
-            
+
+
         // 초기 조준선 색상 설정
         if (crosshairImage != null)
             crosshairImage.color = defaultColor;
@@ -59,21 +57,22 @@ public class UIManager : MonoBehaviour
     {
         if (GMBehavior.instance == null || player == null) return;
         UpdateCommonUI();
-        
-        if (!GMBehavior.instance.isGameOver && !GMBehavior.instance.isGameWin) {
+
+        if (!GMBehavior.instance.isGameOver && !GMBehavior.instance.isGameWin)
+        {
             UpdateStaminaBar();
             UpdateReloadUI();
             UpdateAmmoText();
             UpdateDistanceText();
-            
+
 
             if (!player.isReloading)
             {
                 UpdateCrosshair();
             }
-            
-            
-            }
+
+
+        }
 
     }
 
@@ -103,20 +102,19 @@ public class UIManager : MonoBehaviour
 
     }
 
-
-    void UpdateDistanceText()
+    void UpdateDistanceText() // 거리 표시하기
     {
         if (player == null || distanceText == null) return;
 
         distanceText.text = player.targetDistance.ToString("F1") + "m";
     }
 
-    void UpdateAmmoText()
+    void UpdateAmmoText() // 재장전 상태 표시
     {
         if (ammoText == null || player == null) return;
 
         ammoText.text = player.isReloading ? "Reloading..." : $"{player.currentAmmo} / {player.maxAmmo}";
-        
+
         if (player.currentAmmo <= 0 && !player.isReloading)
         {
             ammoText.color = Color.red;
@@ -126,13 +124,13 @@ public class UIManager : MonoBehaviour
         {
             ammoText.color = Color.white;
         }
-            
+
     }
 
-    void UpdateReloadUI()
+    void UpdateReloadUI() // 재장전 UI
     {
         if (reloadIndicator == null || player == null || crosshairImage == null) return;
-        
+
 
         if (player.isReloading)
         {
@@ -141,7 +139,7 @@ public class UIManager : MonoBehaviour
 
             if (!reloadIndicator.gameObject.activeSelf)
                 reloadIndicator.gameObject.SetActive(true);
-                crosshairImage.gameObject.SetActive(false);
+            crosshairImage.gameObject.SetActive(false);
 
 
             reloadIndicator.fillAmount = player.reloadProgress;
@@ -162,18 +160,18 @@ public class UIManager : MonoBehaviour
     void UpdateCrosshair()
     {
 
-        if (crosshairImage == null || mainCamera == null || player == null) return;if (crosshairImage == null || mainCamera == null || player == null) return;
+        if (crosshairImage == null || mainCamera == null || player == null) return; if (crosshairImage == null || mainCamera == null || player == null) return;
 
         if (player.isReloading)
         {
             crosshairImage.gameObject.SetActive(false);
-            return; 
+            return;
         }
         else
         {
             if (!crosshairImage.gameObject.activeSelf)
                 crosshairImage.gameObject.SetActive(true);
-        } 
+        }
 
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
@@ -202,7 +200,7 @@ public class UIManager : MonoBehaviour
         if (staminaSlider == null || player == null) return;
 
 
-        staminaSlider.value = player.playerCurStamina / player.playerMaxStamina;
+        staminaSlider.value = player.currentStamina / player.maxStamina;
 
         if (staminaFillImage != null)
         {

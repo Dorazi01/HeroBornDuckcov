@@ -15,9 +15,7 @@ public class GMBehavior : MonoBehaviour
 
     public static GMBehavior instance;
 
-    
-
-    public float playerHp = 100f;
+    public int playerHp = 100;
     public int itemCollectCount = 0;
 
     public int gameProgress = 0;
@@ -44,7 +42,6 @@ public class GMBehavior : MonoBehaviour
         }
     }
 
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -53,54 +50,52 @@ public class GMBehavior : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-
     void Init()
     {
-        playerHp = 100f;
+        playerHp = 100;
         itemCollectCount = 0;
         isGameOver = false;
         isGameWin = false;
     }
+
     // Update is called once per frame
     void Update()
     {
         ProgressWin();
-
     }
 
-    public void TakeDamage(float amount)
-    {
-        playerHp -= amount;
-        if (playerHp <= 0)
+    // public void TakeDamage(float amount)
+    // {
+    //     playerHp -= amount;
+    //     if (playerHp <= 0)
+    //     {
+    //         Debug.Log("Player is dead!");
+    //         Cursor.visible = true;
+    //         Cursor.lockState = CursorLockMode.None;
+    //         isGameOver = true;
+    //         Time.timeScale = 0f;
+    //         // Handle player death (e.g., restart level, show game over screen)
+    //     }
+    // }
+
+    /*
+        public void CollectItem()
         {
-            Debug.Log("Player is dead!");
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            isGameOver = true;
-            Time.timeScale = 0f;
-            // Handle player death (e.g., restart level, show game over screen)
+            itemCollectCount++;
+            Debug.Log("Item collected! Total items: " + itemCollectCount);
+
+
+            if (itemCollectCount >= 1 && !isGameOver)
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                isGameWin = true;
+                Debug.Log("All items collected! You win!");
+                Time.timeScale = 0f;
+                // Handle game win (e.g., show victory screen)
+            }
         }
-    }
-/*
-    public void CollectItem()
-    {
-        itemCollectCount++;
-        Debug.Log("Item collected! Total items: " + itemCollectCount);
-
-
-        if (itemCollectCount >= 1 && !isGameOver)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            isGameWin = true;
-            Debug.Log("All items collected! You win!");
-            Time.timeScale = 0f;
-            // Handle game win (e.g., show victory screen)
-        }
-    }
-*/
-
-
+    */
 
     void ProgressWin()
     {
@@ -117,7 +112,6 @@ public class GMBehavior : MonoBehaviour
 
     public void RestartGame()
     {
-        
         SceneManager.LoadScene(0);
         Time.timeScale = 1f;
     }

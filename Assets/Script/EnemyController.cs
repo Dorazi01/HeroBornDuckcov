@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IDamageable
 {
     [Header("Status")]
     public int enemyHp = 100;
@@ -38,13 +38,23 @@ public class EnemyController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            enemyHp -= bulletDamage;
-            if (hpSlider != null) hpSlider.value = enemyHp;
-
-            if (enemyHp <= 0)
-            {
-                Destroy(gameObject);
-            }
+            TakeDamage(bulletDamage);
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        enemyHp -= damage;
+        if (hpSlider != null) hpSlider.value = enemyHp;
+
+        if (enemyHp <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public int GetCurrentHealth()
+    {
+        return enemyHp;
     }
 }

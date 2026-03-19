@@ -3762,12 +3762,17 @@ GameObject:
   - component: {fileID: 156868065}
   - component: {fileID: 156868064}
   - component: {fileID: 156868063}
-  - component: {fileID: 156868060}
-  - component: {fileID: 156868061}
   - component: {fileID: 156868062}
   - component: {fileID: 156868066}
   - component: {fileID: 156868067}
   - component: {fileID: 156868068}
+  - component: {fileID: 156868060}
+  - component: {fileID: 156868061}
+  - component: {fileID: 156868073}
+  - component: {fileID: 156868072}
+  - component: {fileID: 156868071}
+  - component: {fileID: 156868070}
+  - component: {fileID: 156868069}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3929,20 +3934,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af00f4cda1d8e004cbd99e6254e15026, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  gunshotSound: {fileID: 8300000, guid: 3061c7b9b32d894478e4126ccce25ca3, type: 3}
-  targetDistance: 0
-  cameraTransform: {fileID: 963194228}
-  playerCanRun: 1
-  playerMaxStamina: 100
-  playerCurStamina: 100
+  movement: {fileID: 156868073}
+  playerCamera: {fileID: 156868072}
+  shooter: {fileID: 156868071}
+  stamina: {fileID: 156868070}
+  health: {fileID: 156868069}
   firePoint: {fileID: 201816450}
   laserLine: {fileID: 156868067}
+  targetDistance: 0
+  isReloading: 0
+  reloadProgress: 0
   maxAmmo: 30
   currentAmmo: 0
-  reloadProgress: 0
-  isReloading: 0
-  fireRate: 0.07
-  bulletPrefab: {fileID: 7572081456628203475, guid: 47c040c106a400549a735536bbb53a13, type: 3}
+  playerCanRun: 0
+  playerCurStamina: 0
+  playerMaxStamina: 100
 --- !u!136 &156868062
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4267,6 +4273,93 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &156868069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 156868059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b2bee868ff4c94479a713f098b935e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+--- !u!114 &156868070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 156868059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aeb66358e05771489c7f5e672db8747, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxStamina: 100
+  sprintCost: 20
+  jumpCost: 20
+--- !u!114 &156868071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 156868059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4370fbc771d02c48acca6180929986e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePoint: {fileID: 201816450}
+  laserLine: {fileID: 156868067}
+  bulletPrefab: {fileID: 7572081456628203475, guid: 47c040c106a400549a735536bbb53a13, type: 3}
+  gunshotSound: {fileID: 0}
+  maxAmmo: 30
+  fireRate: 0.07
+  reloadTime: 1.5
+  playerCamera: {fileID: 156868072}
+--- !u!114 &156868072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 156868059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78bdb279c81b3644886c619fb07f76cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraTransform: {fileID: 963194228}
+  mouseSensitivity: 3
+  aimSensitivityMultiplier: 0.2
+  firingRecoilMultiplier: 0.4
+  aimPositionOffset: {x: 0, y: 0, z: 3}
+  aimSmoothSpeed: 10
+  recoilKickX: 1
+  recoilKickY: 0.4
+  maxRecoilX: 10
+  maxRecoilY: 3
+  recoilRecoverySpeed: 5
+--- !u!114 &156868073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 156868059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b35a40e53bc9315459495067039d62a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  sprintSpeed: 10
+  aimSpeed: 2.5
+  jumpForce: 5
 --- !u!1 &160744192
 GameObject:
   m_ObjectHideFlags: 0
@@ -36720,7 +36813,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 25.55, y: 377.7}
+  m_AnchoredPosition: {x: 25.550049, y: 377.7}
   m_SizeDelta: {x: 2000, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1626400782
@@ -46058,7 +46151,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 25.55, y: 295.25}
+  m_AnchoredPosition: {x: 25.550049, y: 295.25}
   m_SizeDelta: {x: 2024.6, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &2071101162
