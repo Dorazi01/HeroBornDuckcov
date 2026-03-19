@@ -8,7 +8,6 @@ public class PlayerShooter : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private AudioClip gunshotSound;
 
-    [SerializeField] private int maxAmmo = 30;
     [SerializeField] private float fireRate = 0.07f;
     [SerializeField] private float reloadTime = 1.5f;
 
@@ -22,7 +21,7 @@ public class PlayerShooter : MonoBehaviour
     private bool isFireHeld;
     private bool isShooting;
     private bool isSprinting;
-    private bool isAiming;
+
 
     void Awake()
     {
@@ -45,11 +44,11 @@ public class PlayerShooter : MonoBehaviour
 
     public void SetFireHeld(bool value) => isFireHeld = value;
     public void SetSprinting(bool value) => isSprinting = value;
-    public void SetAiming(bool value) => isAiming = value;
+    public void SetAiming(bool value) => player.isAiming = value;
 
     private void Fire()
     {
-        if (isFireHeld && !isShooting && (!isSprinting || isAiming) &&
+        if (isFireHeld && !isShooting && (!isSprinting || player.isAiming) &&
             player.currentAmmo > 0 && !player.isReloading && Time.time >= nextFireTime)
         {
             isShooting = true;
@@ -59,18 +58,21 @@ public class PlayerShooter : MonoBehaviour
             Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
 
-            Vector3 targetPoint = Physics.Raycast(ray, out hit, 1000f) ? hit.point : ray.GetPoint(1000f);
+            Vector3 targetPoint;
+            if (Physics.Raycast(ray, out hit, 1000f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)) { targetPoint = hit.point; }
+            else { targetPoint = ray.GetPoint(1000f); }
+
             Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
             Vector3 direction = (targetPoint - spawnPos).normalized;
 
             GameObject bullet = Instantiate(bulletPrefab, spawnPos, Quaternion.LookRotation(direction));
 
-            if (audioSource != null && gunshotSound != null)
-                audioSource.PlayOneShot(gunshotSound);
+            if (audioSource != null && gunshotSound != null) { audioSource.PlayOneShot(gunshotSound); }
 
             // 플레이어 충돌 무시
-            foreach (var col in GetComponentsInChildren<Collider>())
-                Physics.IgnoreCollision(col, bullet.GetComponent<Collider>());
+            Collider[] playerColliders = GetComponentsInChildren<Collider>();
+            Collider bulletCollider = bullet.GetComponent<Collider>();
+            foreach (Collider col in playerColliders) Physics.IgnoreCollision(col, bulletCollider);
 
             Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
             bulletRb.useGravity = false;

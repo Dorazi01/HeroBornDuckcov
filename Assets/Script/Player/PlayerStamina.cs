@@ -29,7 +29,7 @@ public class PlayerStamina : MonoBehaviour
 
     private void UpdateStamina()
     {
-        if (isSprinting && playerCanRun && isMoving)
+        if (isSprinting && playerCanRun && isMoving && !player.isAiming)
         {
             player.currentStamina -= sprintCost * Time.fixedDeltaTime;
             if (player.currentStamina < 0) player.currentStamina = 0;

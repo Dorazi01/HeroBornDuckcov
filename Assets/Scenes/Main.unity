@@ -3773,7 +3773,7 @@ GameObject:
   - component: {fileID: 156868071}
   - component: {fileID: 156868070}
   - component: {fileID: 156868069}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -3947,8 +3947,8 @@ MonoBehaviour:
   maxAmmo: 30
   currentAmmo: 0
   playerCanRun: 0
-  playerCurStamina: 0
-  playerMaxStamina: 100
+  currentStamina: 0
+  maxStamina: 100
 --- !u!136 &156868062
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4298,7 +4298,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aeb66358e05771489c7f5e672db8747, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxStamina: 100
   sprintCost: 20
   jumpCost: 20
 --- !u!114 &156868071
@@ -4317,7 +4316,6 @@ MonoBehaviour:
   laserLine: {fileID: 156868067}
   bulletPrefab: {fileID: 7572081456628203475, guid: 47c040c106a400549a735536bbb53a13, type: 3}
   gunshotSound: {fileID: 0}
-  maxAmmo: 30
   fireRate: 0.07
   reloadTime: 1.5
   playerCamera: {fileID: 156868072}
@@ -4357,7 +4355,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  sprintSpeed: 10
   aimSpeed: 2.5
   jumpForce: 5
 --- !u!1 &160744192
@@ -5736,7 +5733,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 201816450}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9586,6 +9583,10 @@ PrefabInstance:
     - target: {fileID: 971699664395834573, guid: 5b7660da18b34694ca4319be3d25b5a4, type: 3}
       propertyPath: m_Name
       value: EnemySpawner (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 971699664395834573, guid: 5b7660da18b34694ca4319be3d25b5a4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1699781861626321036, guid: 5b7660da18b34694ca4319be3d25b5a4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14504,6 +14505,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6169708608314422403, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_LocalPosition.x
       value: -33.69
@@ -15386,6 +15391,10 @@ PrefabInstance:
     - target: {fileID: 971699664395834573, guid: 5b7660da18b34694ca4319be3d25b5a4, type: 3}
       propertyPath: m_Name
       value: EnemySpawner (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 971699664395834573, guid: 5b7660da18b34694ca4319be3d25b5a4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1699781861626321036, guid: 5b7660da18b34694ca4319be3d25b5a4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22660,7 +22669,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -24091,6 +24100,10 @@ PrefabInstance:
     - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_Name
       value: Enemy (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6169708608314422403, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_LocalPosition.x
@@ -28236,6 +28249,10 @@ PrefabInstance:
     - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_Name
       value: Enemy (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6169708608314422403, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37135,6 +37152,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6169708608314422403, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_LocalPosition.x
       value: -29.72
@@ -42754,6 +42775,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6169708608314422403, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_LocalPosition.x
       value: -31.43
@@ -42905,6 +42930,10 @@ PrefabInstance:
     - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_Name
       value: Enemy (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6169708608314422403, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_LocalPosition.x
@@ -46351,6 +46380,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6169708608314422403, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_LocalPosition.x
       value: -33.69
@@ -47104,6 +47137,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6169708608314422403, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_LocalPosition.x
       value: -29.72
@@ -47168,6 +47205,10 @@ PrefabInstance:
     - target: {fileID: 971699664395834573, guid: 5b7660da18b34694ca4319be3d25b5a4, type: 3}
       propertyPath: m_Name
       value: EnemySpawner (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 971699664395834573, guid: 5b7660da18b34694ca4319be3d25b5a4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2057173724360766917, guid: 5b7660da18b34694ca4319be3d25b5a4, type: 3}
       propertyPath: m_Size.z
@@ -53429,6 +53470,10 @@ PrefabInstance:
     - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 185372012564091705, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6169708608314422403, guid: 8aaeebf9cff278041b88f8c42ad31728, type: 3}
       propertyPath: m_LocalPosition.x

@@ -27,8 +27,8 @@ public class PlayerCamera : MonoBehaviour
 
     void Start()
     {
-        if (cameraTransform != null)
-            defaultCameraPos = cameraTransform.localPosition;
+        if (cameraTransform != null) { defaultCameraPos = cameraTransform.localPosition; }
+
     }
 
     void Update()
@@ -78,10 +78,28 @@ public class PlayerCamera : MonoBehaviour
 
     private void HandleCameraZoom()
     {
-        if (cameraTransform == null) return;
-        Vector3 targetPos = isAiming ? defaultCameraPos + aimPositionOffset : defaultCameraPos;
-        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, targetPos,
-                                                     Time.deltaTime * aimSmoothSpeed);
+        if (cameraTransform == null) { return; }
+
+        Vector3 targetPos;
+        if (isAiming)
+        {
+            // 조준 중: 기본 위치 + 앞으로 이동(aimOffset)
+            targetPos = defaultCameraPos + aimPositionOffset;
+        }
+        else
+        {
+            // 평상시: 기본 위치로 복귀
+            targetPos = defaultCameraPos;
+        }
+
+        // 부드럽게 이동 (Lerp)
+        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, targetPos, Time.deltaTime * aimSmoothSpeed);
+
+        // Y축 회전(좌우)은 보통 제한하지 않지만, 
+        // 급격한 회전을 방지하기 위해 각도를 0~360 사이로 유지해주는 것이 깔끔합니다.
+        if (yRotation > 360f) yRotation -= 360f;
+        if (yRotation < -360f) yRotation += 360f;
+
     }
 
     public void SetAiming(bool value) => isAiming = value;

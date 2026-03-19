@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float sprintSpeed = 10f;
+    // [SerializeField] private float sprintSpeed = 10f;
     [SerializeField] private float aimSpeed = 2.5f;
     [SerializeField] private float jumpForce = 5f;
 
@@ -41,11 +41,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
-        if (rb == null) return;
-
-        float currentSpeed = isAiming ? aimSpeed : (isSprinting && playerCanRun) ? sprintSpeed : moveSpeed;
+        if (isAiming)
+        {
+            moveSpeed = aimSpeed; // 2.5f (조준 시 느리게)
+        }
+        else if (isSprinting && playerCanRun)
+        {
+            moveSpeed = 10f; // 달리기
+        }
+        else
+        {
+            moveSpeed = 5f; // 걷기
+        }
         Vector3 moveDirection = transform.right * inputVector.x + transform.forward * inputVector.y;
-        rb.linearVelocity = new Vector3(moveDirection.x * currentSpeed, rb.linearVelocity.y, moveDirection.z * currentSpeed);
+        rb.linearVelocity = new Vector3(moveDirection.x * moveSpeed, rb.linearVelocity.y, moveDirection.z * moveSpeed);
     }
 
 

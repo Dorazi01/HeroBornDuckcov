@@ -199,19 +199,12 @@ public class UIManager : MonoBehaviour
     {
         if (staminaSlider == null || player == null) return;
 
-
         staminaSlider.value = player.currentStamina / player.maxStamina;
 
         if (staminaFillImage != null)
         {
-            if (player.playerCanRun)
-            {
-                staminaFillImage.color = normalStaminaColor;
-            }
-            else
-            {
-                staminaFillImage.color = exhaustedStaminaColor;
-            }
+            if (staminaSlider.value > 0.1) { staminaFillImage.color = normalStaminaColor; }
+            else { staminaFillImage.color = exhaustedStaminaColor; }
         }
     }
 }

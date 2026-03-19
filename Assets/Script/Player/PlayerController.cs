@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     public float targetDistance;
     private Vector2 inputVector;
-    private bool isAiming;
+    internal bool isAiming;
 
     public bool isReloading;
     public float reloadProgress;
