@@ -4,7 +4,6 @@ using System.Collections;
 public class PlayerShooter : MonoBehaviour
 {
     [SerializeField] private Transform firePoint;
-    [SerializeField] private LineRenderer laserLine;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private AudioClip gunshotSound;
 
@@ -90,16 +89,30 @@ public class PlayerShooter : MonoBehaviour
         }
     }
 
-    private void DrawLaser()
+    void DrawLaser()
     {
-        if (laserLine == null || firePoint == null) return;
+        if (player.laserLine == null || firePoint == null) return;
 
+        // 1. 카메라 정중앙에서 목표 찾기
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
-        Vector3 targetPoint = Physics.Raycast(ray, out hit, 1000f) ? hit.point : ray.GetPoint(100f);
+        Vector3 targetPoint;
 
-        laserLine.SetPosition(0, firePoint.position);
-        laserLine.SetPosition(1, targetPoint);
+        // 2. 목표지점 결정 (닿은 곳 or 허공)
+        if (Physics.Raycast(ray, out hit, 1000f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        {
+            targetPoint = hit.point;
+        }
+        else
+        {
+            targetPoint = ray.GetPoint(100f);
+        }
+
+        // 3. 라인 렌더러로 선 그리기 (총구 -> 목표)
+        player.laserLine.SetPosition(0, firePoint.position); // 시작점: 총구
+        player.laserLine.SetPosition(1, targetPoint);        // 끝점: 크로스헤어가 닿은 곳
+
+        player.targetDistance = Vector3.Distance(transform.position, targetPoint);
     }
 
     public IEnumerator ReloadCoroutine()

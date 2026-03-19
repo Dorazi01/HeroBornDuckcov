@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerStamina stamina;
     [SerializeField] private PlayerHealth health;
     [SerializeField] private Transform firePoint;
-    [SerializeField] private LineRenderer laserLine;
+    [SerializeField] internal LineRenderer laserLine;
 
     InputAction playerInput;
 
